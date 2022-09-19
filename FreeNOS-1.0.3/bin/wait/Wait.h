@@ -17,11 +17,16 @@ class Wait : public POSIXApplication
     Wait(int argc, char **argv);
 
     /**
+     * Destructor
+     */
+    virtual ~Wait(){};
+
+    /**
      * Execute the application.
      *
      * @return Result code
      */
-    virtual Result exec();
+    virtual Result exec(){};
 };
 
 #endif
