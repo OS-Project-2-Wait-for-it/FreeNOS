@@ -18,7 +18,7 @@ Wait::Wait(int argc, char **argv)
 
 Wait::Result Wait::exec()
 {
-    const ProcessID PID = atoi(arguments().get("SECONDS"));
+    const ProcessID PID = atoi(arguments().get("PROCESS"));
 
     const ProcessClient process;
     const ProcessID pid = process.getProcessID();//if PID doesnt work out, try it this way?
