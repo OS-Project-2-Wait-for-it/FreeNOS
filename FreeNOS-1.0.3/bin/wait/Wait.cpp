@@ -1,14 +1,13 @@
 #include "Wait.h"
 #include <stdio.h>
 #include <unistd.h>
-#include <unistd.h>
 #include <ProcessClient.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <Macros.h>
 #include <stdio.h>
 #include <unistd.h>
-#include <Types.h>
+#include <sys/wait.h>
 
 Wait::Wait(int argc, char **argv)
     : POSIXApplication(argc, argv)
@@ -21,26 +20,42 @@ Wait::Wait(int argc, char **argv)
 Wait::Result Wait::exec()
 {
     String out;
+    int status;
+    
     const ProcessID PID = atoi(arguments().get("PROCESS"));
-
     const ProcessClient process;
-    const ProcessID pid = process.getProcessID();//if PID doesnt work out, try it this way?
+
     ProcessClient::Info info;
 
         const ProcessClient::Result result = process.processInfo(PID, info); //process info gets info by id -- other methods do so by name
         if (result == ProcessClient::Success)
         {
-            DEBUG("PID " << pid << " state = " << *info.textState);
+            DEBUG("PID " << PID << " state = " << *info.textState);
 
             char line[128];
             snprintf(line, sizeof(line), //this is the outputted table after you 'ps' and its formatted content
-                    "%3d %7d %4d %5d %10s %32s\r\n",
-                     pid, info.kernelState.parent,
-                     PID, info, *info.textState, *info.command);
+                    "%7d %4d %5d %10s %32s\r\n",
+                     info.kernelState.parent,
+                     PID, result, *info.textState, *info.command);
             out << line;
             write(1, *out, out.length());
-            //im assuming this might go here?
-           //pid_t waitpid(pid_t pid, int *stat_loc, int options)
+            waitpid(PID, &status, 0);
+        }
+
+        if(PID > ProcessClient::MaximumProcesses)
+        {
+            ERROR("Not an existing process");
+            return InvalidArgument;
+        }
+        else if(PID < 0)
+        {
+            ERROR("Invalid process ID");
+            return InvalidArgument;
+        }
+        else if(PID < 17)
+        {
+            ERROR("Potentially dangerous execution");
+            return InvalidArgument;
         }
 
         return Success;
