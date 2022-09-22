@@ -1,12 +1,14 @@
 #include "Wait.h"
-#include <Types.h>
-#include <Macros.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <unistd.h>
 #include <ProcessClient.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <Macros.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <Types.h>
 
 Wait::Wait(int argc, char **argv)
     : POSIXApplication(argc, argv)
@@ -18,6 +20,7 @@ Wait::Wait(int argc, char **argv)
 
 Wait::Result Wait::exec()
 {
+    String out;
     const ProcessID PID = atoi(arguments().get("PROCESS"));
 
     const ProcessClient process;
@@ -29,6 +32,13 @@ Wait::Result Wait::exec()
         {
             DEBUG("PID " << pid << " state = " << *info.textState);
 
+            char line[128];
+            snprintf(line, sizeof(line), //this is the outputted table after you 'ps' and its formatted content
+                    "%3d %7d %4d %5d %10s %32s\r\n",
+                     pid, info.kernelState.parent,
+                     PID, info, *info.textState, *info.command);
+            out << line;
+            write(1, *out, out.length());
             //im assuming this might go here?
            //pid_t waitpid(pid_t pid, int *stat_loc, int options)
         }
