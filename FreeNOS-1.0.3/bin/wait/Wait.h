@@ -26,7 +26,7 @@ class Wait : public POSIXApplication
      *
      * @return Result code
      */
-    virtual Result exec(){};
+    virtual Result exec();
 };
 
 #endif

@@ -41,14 +41,14 @@ ProcessList::Result ProcessList::exec()
     {
         ProcessClient::Info info;
 
-        const ProcessClient::Result result = process.processInfo(pid, info);
+        const ProcessClient::Result result = process.processInfo(pid, info); //process info gets info by id -- other methods do so by name
         if (result == ProcessClient::Success)
         {
             DEBUG("PID " << pid << " state = " << *info.textState);
 
             // Output a line
             char line[128];
-            snprintf(line, sizeof(line),
+            snprintf(line, sizeof(line), //this is the outputted table after you 'ps' and its formatted content
                     "%3d %7d %4d %5d %10s %32s\r\n",
                      pid, info.kernelState.parent,
                      0, 0, *info.textState, *info.command);
