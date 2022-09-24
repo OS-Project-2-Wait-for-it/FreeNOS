@@ -44,7 +44,7 @@ Wait::Result Wait::exec()
 
         if(PID > ProcessClient::MaximumProcesses)
         {
-            ERROR("Not an existing process");
+            ERROR("Maximum number of processes is 1024");
             return InvalidArgument;
         }
         else if(PID < 0)
