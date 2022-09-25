@@ -33,12 +33,12 @@ Wait::Result Wait::exec()
             DEBUG("PID " << PID << " state = " << *info.textState);
 
             char line[128];
-            snprintf(line, sizeof(line), //this is the outputted table after you 'ps' and its formatted content
-                    "%7d %4d %5d %10s %32s\r\n",
-                     info.kernelState.parent,
-                     PID, result, *info.textState, *info.command);
-            out << line;
-            write(1, *out, out.length());
+            //snprintf(line, sizeof(line), //this is the outputted table after you 'ps' and its formatted content
+             //       "%7d %4d %5d %10s %32s\r\n",
+               //      info.kernelState.parent,
+                //     PID, result, *info.textState, *info.command);
+            //out << line;
+            //write(1, *out, out.length());
             waitpid(PID, &status, 0);
         }
 
