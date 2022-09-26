@@ -27,7 +27,7 @@ Wait::Result Wait::exec()
 
     ProcessClient::Info info;
 
-        const ProcessClient::Result result = process.processInfo(PID, info); //process info gets info by id -- other methods do so by name
+        const ProcessClient::Result result = process.processInfo(PID, info);
         if(PID < 0)
         {
             ERROR("Invalid process ID");
@@ -43,15 +43,10 @@ Wait::Result Wait::exec()
             if(PID < 17)
             {
                 ERROR("Potentially dangerous execution");
+                return InvalidArgument;
             }
             DEBUG("PID " << PID << " state = " << *info.textState);
             char line[128];
-            //snprintf(line, sizeof(line), //this is the outputted table after you 'ps' and its formatted content
-             //       "%7d %4d %5d %10s %32s\r\n",
-               //      info.kernelState.parent,
-                //     PID, result, *info.textState, *info.command);
-            //out << line;
-            //write(1, *out, out.length());
             waitpid(PID, &status, 0);
             out = "";
             out << "Process [" << PID << "]+      Done : " << *info.command << "\n";
