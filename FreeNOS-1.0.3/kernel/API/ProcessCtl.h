@@ -68,6 +68,9 @@ typedef struct ProcessInfo
     /** Parent process id. */
     ProcessID parent;
 
+    /** Process priority. */
+    ProcessID priority; //added this
+
     /** Defines the current state of the Process. */
     Process::State state;
 }

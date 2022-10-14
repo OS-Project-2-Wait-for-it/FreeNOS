@@ -66,12 +66,13 @@ Scheduler::Result Scheduler::dequeue(Process *proc, bool ignoreState)
     return InvalidArgument;
 }
 
-Process * Scheduler::select()
+Process * Scheduler::select() //interesting
 {
     if (m_queue.count() > 0)
     {
         Process *p = m_queue.pop();
         m_queue.push(p);
+        //i feel lke we can grab some kind of info here but idk what
 
         return p;
     }

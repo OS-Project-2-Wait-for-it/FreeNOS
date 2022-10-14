@@ -1,4 +1,4 @@
-/*
+ /*
  * Copyright (C) 2015 Niek Linnenbank
  *
  * This program is free software: you can redistribute it and/or modify
@@ -21,6 +21,7 @@
 #include "Scheduler.h"
 #include "ProcessEvent.h"
 #include "ProcessManager.h"
+#include "ProcessClient.h"
 
 ProcessManager::ProcessManager()
     : m_procs()
@@ -74,8 +75,10 @@ Process * ProcessManager::create(const Address entry,
         return ZERO;
     }
 
+    ProcessClient::Info info;
     // Overwrite dummy with actual Process
-    m_procs.insertAt(pid, proc);
+    m_procs.insertAt(pid, proc); //looks interesting
+    info.priority = pid;
 
     // Report to scheduler, if requested
     if (readyToRun)

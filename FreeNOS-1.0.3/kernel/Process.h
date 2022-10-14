@@ -108,6 +108,11 @@ class Process
     ProcessID getWait() const;
 
     /**
+     * Getthe priority for a process.
+     */
+    ProcessID getPriority() const;
+
+    /**
      * Get wait result
      */
     uint getWaitResult() const;
@@ -248,6 +253,9 @@ class Process
 
     /** Parent process */
     ProcessID m_parent;
+
+    /** Process priority */
+    ProcessID m_priority;
 
     /** Current process status. */
     State m_state;

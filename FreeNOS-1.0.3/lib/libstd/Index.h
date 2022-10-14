@@ -110,7 +110,7 @@ template <class T, const Size N> class Index
      *
      * @return True on success, false otherwise.
      */
-    virtual bool insertAt(const Size position, T *item)
+    virtual bool insertAt(const Size position, T *item) //this looks interesting
     {
         // Position must be in range of the array
         if (position >= N)
