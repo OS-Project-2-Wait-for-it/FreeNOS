@@ -18,10 +18,10 @@
 #include <FreeNOS/System.h>
 #include <Log.h>
 #include <ListIterator.h>
-#include "Scheduler.h"
-#include "ProcessEvent.h"
-#include "ProcessManager.h"
-#include "ProcessClient.h"
+#include <Scheduler.h>
+#include <ProcessEvent.h>
+#include <ProcessManager.h>
+#include <../lib/libruntime/ProcessClient.h>
 
 ProcessManager::ProcessManager()
     : m_procs()
