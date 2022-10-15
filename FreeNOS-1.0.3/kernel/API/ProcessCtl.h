@@ -40,6 +40,7 @@ typedef enum ProcessOperation
     KillPID,
     GetPID,
     GetParent,
+    GetPriority, //added get priority process operation
     WatchIRQ,
     EnableIRQ,
     DisableIRQ,
