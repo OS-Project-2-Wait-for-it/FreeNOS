@@ -72,6 +72,7 @@ Process * Scheduler::select() //interesting
     {
         Process *p = m_queue.pop();
         m_queue.push(p);
+        DEBUG("new process: " << p->m_waitId); //idk just testing
         //i feel lke we can grab some kind of info here but idk what
 
         return p;

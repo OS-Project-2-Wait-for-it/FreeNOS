@@ -113,7 +113,7 @@ void Process::setParent(ProcessID id)
     m_parent = id;
 }
 
-void Process::setPriority(Size newPriority) 
+void Process::setPriority(uint newPriority) //was size, gonna try uint now
 {
     m_priority = newPriority;
 }

@@ -56,10 +56,16 @@ class ProcessClient
     /**
      * Priority number
      */
-    enum ProcessPriority
+    //enum ProcessPriority
+    //{
+    //    Priority // idk if this is right
+    //};
+
+    typedef struct Priority
     {
-        Priority // idk if this is right
-    };
+      uint priority;
+    }
+    Priority;
 
     /**
      * Process information
@@ -75,7 +81,7 @@ class ProcessClient
         /** Textual state of the process */
         String textState;
 
-        Size priority; //was type ProcessPriority
+        uint priority; //was type ProcessPriority, was size
     }
     Info;
 

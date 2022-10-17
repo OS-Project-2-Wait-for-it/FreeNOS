@@ -79,6 +79,9 @@ Process * ProcessManager::create(const Address entry,
     // Overwrite dummy with actual Process
     m_procs.insertAt(pid, proc); //looks interesting
     info.priority = pid;
+    info.priority = proc->getWait();
+    //m_priority->getWait(); //tried this idk what im doing
+    
 
     // Report to scheduler, if requested
     if (readyToRun)
@@ -91,7 +94,6 @@ Process * ProcessManager::create(const Address entry,
     {
         proc->setParent(m_current->getID());
     }
-
     return proc;
 }
 
@@ -102,10 +104,10 @@ Process * ProcessManager::get(const ProcessID id)
 
 void ProcessManager::remove(Process *proc, const uint exitStatus)
 {
-    if (proc == m_idle)
+    if (proc == m_idle) //hmmm
         m_idle = ZERO;
 
-    if (proc == m_current)
+    if (proc == m_current) //also hmm
         m_current = ZERO;
 
     // Notify processes which are waiting for this Process
@@ -114,7 +116,7 @@ void ProcessManager::remove(Process *proc, const uint exitStatus)
     {
         if (m_procs[i] != ZERO &&
             m_procs[i]->getState() == Process::Waiting &&
-            m_procs[i]->getWait() == proc->getID())
+            m_procs[i]->getWait() == proc->getID()) //triple hmm
         {
             const Process::Result result = m_procs[i]->join(exitStatus);
             if (result != Process::Success)

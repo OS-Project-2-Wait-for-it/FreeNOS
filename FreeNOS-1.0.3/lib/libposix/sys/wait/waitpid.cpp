@@ -28,7 +28,7 @@ pid_t waitpid(pid_t pid, int *stat_loc, int options)
     {
         case API::NotFound:
             errno = ESRCH;
-            return (pid_t) -1;
+            return (pid_t) -1; //this looks interesting
 
         case API::Success:
             if (stat_loc)

@@ -40,6 +40,7 @@ ProcessList::Result ProcessList::exec()
     for (ProcessID pid = 0; pid < ProcessClient::MaximumProcesses; pid++)
     {
         ProcessClient::Info info;
+        //ProcessClient::Priority test; //i think we need something like this which might be why he suggested we make a new enum??
 
         const ProcessClient::Result result = process.processInfo(pid, info);
         if (result == ProcessClient::Success)
@@ -51,7 +52,7 @@ ProcessList::Result ProcessList::exec()
             snprintf(line, sizeof(line),
                     "%3d %7d %4d %5d %10s %3d %32s\r\n",
                      pid, info.kernelState.parent,
-                     0, 0, *info.textState, info.priority, *info.command); //added info.priority
+                     0, 0, *info.textState, info.priority, *info.command); //had info.priority
             out << line;
         }
     }
