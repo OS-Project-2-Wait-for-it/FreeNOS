@@ -90,7 +90,7 @@ class Scheduler
   private:
 
     /** Contains processes ready to run */
-    Queue<Process *, MAX_PROCS> m_queue;
+    Queue<Process *, MAX_PROCS> m_queue; //i guess the order is the priority and we can just add a priority variable?
 };
 
 /**

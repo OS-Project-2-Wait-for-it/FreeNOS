@@ -19,6 +19,14 @@
 #include <Types.h>
 #include <Macros.h>
 #include "ProcessClient.h"
+#include <FreeNOS/System.h>
+#include <FreeNOS/Kernel.h>
+#include <FreeNOS/Config.h>
+#include <FreeNOS/Process.h>
+#include <FreeNOS/ProcessEvent.h>
+#include <FreeNOS/ProcessManager.h>
+#include <Log.h>
+//#include "ProcessCtl.h"
 
 const ProcessID ProcessClient::m_pid = ProcessCtl(SELF, GetPID, 0);
 
@@ -75,7 +83,11 @@ ProcessClient::Result ProcessClient::processInfo(const ProcessID pid,
     // Fill output
     info.command = cmd;
     info.textState = (pid == m_pid ? "Running" : textStates[info.kernelState.state]);
-    info.priority = getPriorityID(); //also idk if this is the right move
+    //ProcessManager *procs = Kernel::instance()->getProcessManager();
+    //if (pid == SELF)
+    //{
+     //   info.priority = procs->current()->getPriority();
+    ////i think if we can get process from process id then we can transfer process priority to this info structure info.priority = getPriorityID(); 
 #endif /* __HOST__ */
 
     return Success;

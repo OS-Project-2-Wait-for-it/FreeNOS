@@ -71,7 +71,7 @@ API::Result ProcessCtlHandler(const ProcessID procID,
         return (API::Result) procs->current()->getParent();
     
     case GetPriority:
-        return (API::Result) procs->current()->getPriority(); //Hopefully returns priority
+        return (API::Result) procs->current()->getPriority(); //Hopefully returns priority - nah it doesnt but keeping this for now
 
     case Schedule:
         procs->schedule();
@@ -138,7 +138,7 @@ API::Result ProcessCtlHandler(const ProcessID procID,
         info->id    = proc->getID();
         info->state = proc->getState();
         info->parent = proc->getParent();
-        info->priority = proc->getPriority();
+        info->priority = proc->getPriority();//so its not reading this for some reason
         break;
 
     case WaitPID:

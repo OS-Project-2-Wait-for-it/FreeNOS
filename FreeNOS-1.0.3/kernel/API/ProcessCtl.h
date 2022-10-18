@@ -70,8 +70,7 @@ typedef struct ProcessInfo
     ProcessID parent;
 
     /** Process priority. */
-    ProcessID priority; //added this
-
+    ProcessID priority; //probably dont need this one but ill leave it for now
     /** Defines the current state of the Process. */
     Process::State state;
 }

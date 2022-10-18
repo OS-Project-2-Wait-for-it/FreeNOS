@@ -38,6 +38,7 @@ Scheduler::Result Scheduler::enqueue(Process *proc, bool ignoreState)
     }
 
     m_queue.push(proc);
+    proc->setPriority(m_queue.count());
     return Success;
 }
 
@@ -71,8 +72,8 @@ Process * Scheduler::select() //interesting
     if (m_queue.count() > 0)
     {
         Process *p = m_queue.pop();
+
         m_queue.push(p);
-        DEBUG("new process: " << p->m_waitId); //idk just testing
         //i feel lke we can grab some kind of info here but idk what
 
         return p;
