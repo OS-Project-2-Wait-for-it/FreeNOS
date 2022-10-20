@@ -47,6 +47,7 @@ typedef enum ProcessOperation
     SendIRQ,
     InfoPID,
     WaitPID,
+    ChangePri,
     InfoTimer,
     WaitTimer,
     EnterSleep,

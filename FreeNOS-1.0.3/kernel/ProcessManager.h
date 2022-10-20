@@ -115,6 +115,15 @@ class ProcessManager
     Result wait(Process *proc);
 
     /**
+     * Switch process priorities.
+     *
+     * @param proc Process pointer
+     *
+     * @return Result code
+     */
+    Result switchProcessPriorities(Process *proc);
+
+    /**
      * Remove given Process from the Scheduler
      *
      * @param proc Process pointer

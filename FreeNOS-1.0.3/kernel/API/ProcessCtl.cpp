@@ -71,13 +71,13 @@ API::Result ProcessCtlHandler(const ProcessID procID,
         return (API::Result) procs->current()->getParent();
     
     case GetPriority:
-        return (API::Result) procs->current()->getPriority(); //Hopefully returns priority - nah it doesnt but keeping this for now
+        return (API::Result) procs->current()->getPriority(); // okay this ones good to grab the priority
 
     case Schedule:
         procs->schedule();
         break;
 
-    case Stop:
+    case Stop: //hmm maybe we can use this and resume?
         if (procs->stop(proc) != ProcessManager::Success)
         {
             ERROR("failed to stop PID " << proc->getID());
@@ -141,13 +141,13 @@ API::Result ProcessCtlHandler(const ProcessID procID,
         info->priority = proc->getPriority();//so its not reading this for some reason
         break;
 
-    case WaitPID:
-        if (procs->wait(proc) != ProcessManager::Success)
+    case WaitPID: //my guess is we add another OP to change priority when calling process ctrl handler // and for that maybe we'll have priority queue?
+        if (procs->wait(proc) != ProcessManager::Success) //proc is process that will go first now. procs is dequeued in wait it seems
         {
             ERROR("failed to wait for Process ID " << proc->getID());
             return API::IOError;
         }
-        procs->schedule();
+        procs->schedule(); //hmm does something here
 
         // contains the exit status of the other process.
         // Note that only the Intel code has kernel stacks.
@@ -157,7 +157,25 @@ API::Result ProcessCtlHandler(const ProcessID procID,
         //
         // Note that the API::Result is stored in the lower 16-bit of the
         // return value and the process exit status is stored in the upper 16 bits.
-        return (API::Result) ((API::Success) | (procs->current()->getWaitResult() << 16));
+        return (API::Result) ((API::Success) | (procs->current()->getWaitResult() << 16)); //im not sure what this is for
+
+    case ChangePri: //temp items below for now
+        if (procs->switchProcessPriorities(proc) != ProcessManager::Success) //proc is process that will go first now. procs is dequeued in wait it seems
+        {
+            ERROR("failed to change priorities for Process ID " << proc->getID());
+            return API::IOError; 
+        }
+        procs->schedule(); //i think we can leave this one here bc the switch priorities should return a process that the scheduler will .. schedule
+
+        // contains the exit status of the other process.
+        // Note that only the Intel code has kernel stacks.
+        // For ARM, the kernel continues executing here even after
+        // the schedule() is done. For ARM, the actual wait result is
+        // injected directly in the saved CPU registers.
+        //
+        // Note that the API::Result is stored in the lower 16-bit of the
+        // return value and the process exit status is stored in the upper 16 bits.
+        return (API::Result) ((API::Success) | (procs->current()->getPriResult() << 16)); //im not sure what this is for
 
     case InfoTimer:
         if (!(timer = Kernel::instance()->getTimer()))
@@ -200,6 +218,7 @@ Log & operator << (Log &log, ProcessOperation op)
         case DisableIRQ:log.append("DisableIRQ"); break;
         case InfoPID:   log.append("InfoPID"); break;
         case WaitPID:   log.append("WaitPID"); break;
+        case ChangePri: log.append("ChangePri"); break;
         case InfoTimer: log.append("InfoTimer"); break;
         case EnterSleep: log.append("EnterSleep"); break;
         case Schedule:  log.append("Schedule"); break;

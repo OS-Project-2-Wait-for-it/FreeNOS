@@ -163,7 +163,7 @@ ProcessManager::Result ProcessManager::schedule()
     const Size sleepTimerCount = m_sleepTimerQueue.count();
 
     // Let the scheduler select a new process
-    Process *proc = m_scheduler->select();
+    Process *proc = m_scheduler->select(); //returns process at the top of the queue
 
     // If no process ready, let us idle
     if (!proc)
@@ -199,7 +199,7 @@ ProcessManager::Result ProcessManager::schedule()
     {
         Process *previous = m_current;
         m_current = proc;
-        proc->execute(previous);
+        proc->execute(previous); //this one makes the process run ig? since we selected this one from the scheduler above ... connecting the dots
     }
 
     return Success;
@@ -230,6 +230,17 @@ ProcessManager::Result ProcessManager::wait(Process *proc)
     }
 
     return dequeueProcess(m_current);
+}
+
+ProcessManager::Result ProcessManager::switchProcessPriorities(Process *proc) //change the priority somewhere in here and make it so queue pops based on priority??
+{
+    if (m_current->wait(proc->getID()) != Process::Success) //this is another wait it seems, maybe we can use it tho bc idk how else to check for errors
+    {
+        ERROR("process ID " << m_current->getID() << " failed to wait");
+        return IOError;
+    }
+
+    return dequeueProcess(m_current); //maybe we can have a switch items in queue call here rather than dequeue
 }
 
 ProcessManager::Result ProcessManager::stop(Process *proc)

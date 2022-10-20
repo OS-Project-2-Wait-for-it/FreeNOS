@@ -22,7 +22,7 @@
 
 pid_t waitpid(pid_t pid, int *stat_loc, int options)
 {
-    const ulong result = (ulong) ProcessCtl(pid, WaitPID);
+    const ulong result = (ulong) ProcessCtl(pid, WaitPID); //process ctrl called here, need to sub with new changePri or whatever i named it
 
     switch ((const API::Result) (result & 0xffff))
     {

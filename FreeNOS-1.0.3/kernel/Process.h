@@ -118,6 +118,11 @@ class Process
     uint getWaitResult() const;
 
     /**
+     * Get priority change result
+     */
+    uint getPriResult() const;
+
+    /**
      * Get process shares.
      *
      * @return Reference to memory shares.
@@ -270,6 +275,9 @@ class Process
 
     /** Wait exit result of the other Process. */
     uint m_waitResult;
+
+    /** Priority change exit result of the other Process. */
+    uint m_priResult;
 
     /** Privilege level */
     bool m_privileged;

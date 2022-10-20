@@ -22,6 +22,11 @@
 #include <unistd.h>
 #include <../lib/libruntime/ProcessClient.h>
 #include "Renice.h"
+#include <FreeNOS/User.h>
+#include "sys/wait.h"
+#include "sys/types.h"
+#include <errno.h>
+
 
 Renice::Renice(int argc, char **argv)
     : POSIXApplication(argc, argv)
@@ -34,6 +39,30 @@ Renice::Renice(int argc, char **argv)
 
 Renice::~Renice()
 {
+}
+
+//straight copy from waitpid, gotta let it take two arguements maybe
+pid_t waitpid(pid_t pid, int *stat_loc, int options) //i think maybe call this in exec() or should we be neat and make a changePri folder? so copying the way waitPID is organized
+{
+    const ulong result = (ulong) ProcessCtl(pid, ChangePri); //process ctrl called here, need to sub with new changePri or whatever i named it
+
+    switch ((const API::Result) (result & 0xffff))
+    {
+        case API::NotFound:
+            errno = ESRCH;
+            return (pid_t) -1; //this looks interesting
+
+        case API::Success:
+            if (stat_loc)
+            {
+                *stat_loc = result >> 16;
+            }
+            return pid;
+
+        default:
+            errno = EIO;
+            return (pid_t) -1;
+    }
 }
 
 Renice::Result Renice::exec()

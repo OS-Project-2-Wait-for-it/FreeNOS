@@ -56,6 +56,7 @@ Scheduler::Result Scheduler::dequeue(Process *proc, bool ignoreState)
     for (Size i = 0; i < count; i++)
     {
         Process *p = m_queue.pop();
+        //p->setPriority(m_queue.count()); //this one really messes with the priorities -- i think processes in "ready" are dequeued
 
         if (p == proc)
             return Success;
@@ -73,8 +74,7 @@ Process * Scheduler::select() //interesting
     {
         Process *p = m_queue.pop();
 
-        m_queue.push(p);
-        //i feel lke we can grab some kind of info here but idk what
+        m_queue.push(p); //fifo thing going on here ig
 
         return p;
     }
