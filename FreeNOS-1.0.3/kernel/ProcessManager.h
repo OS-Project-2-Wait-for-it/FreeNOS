@@ -121,7 +121,7 @@ class ProcessManager
      *
      * @return Result code
      */
-    Result switchProcessPriorities(Process *proc);
+    Result changePriority(Process *proc, uint newPriority);
 
     /**
      * Remove given Process from the Scheduler
@@ -239,6 +239,8 @@ class ProcessManager
      * @return Result code
      */
     Result dequeueProcess(Process *proc, const bool ignoreState = false) const;
+
+    Result sortProcesses(); //idk if i need const for this one.
 
   private:
 

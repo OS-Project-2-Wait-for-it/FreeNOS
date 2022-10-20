@@ -40,7 +40,7 @@ typedef enum ProcessOperation
     KillPID,
     GetPID,
     GetParent,
-    GetPriority, //added get priority process operation
+    GetPriority,
     WatchIRQ,
     EnableIRQ,
     DisableIRQ,
@@ -71,7 +71,7 @@ typedef struct ProcessInfo
     ProcessID parent;
 
     /** Process priority. */
-    ProcessID priority; //probably dont need this one but ill leave it for now
+    ProcessID priority;
     /** Defines the current state of the Process. */
     Process::State state;
 }
@@ -85,6 +85,7 @@ Log & operator << (Log &log, ProcessOperation op);
  *
  * @param proc Target Process' ID.
  * @param op The operation to perform.
+ * @param forPriorityOnly New priority to set for provided process.
  * @param addr Input argument address, used for program entry point for Spawn,
  *             ProcessInfo pointer for Info.
  * @param output Output argument address (optional).
@@ -96,6 +97,7 @@ Log & operator << (Log &log, ProcessOperation op);
  */
 inline API::Result ProcessCtl(const ProcessID proc,
                               const ProcessOperation op,
+                              const uint forPriorityOnly = 1,
                               const Address addr = 0,
                               const Address output = 0)
 {

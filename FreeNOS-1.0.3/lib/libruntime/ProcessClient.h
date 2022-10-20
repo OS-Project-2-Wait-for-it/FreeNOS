@@ -54,20 +54,6 @@ class ProcessClient
     };
 
     /**
-     * Priority number
-     */
-    //enum ProcessPriority
-    //{
-    //    Priority // idk if this is right
-    //};
-
-    typedef struct Priority
-    {
-      uint priority;
-    }
-    Priority;
-
-    /**
      * Process information
      */
     typedef struct Info

@@ -26,6 +26,7 @@
 
 API::Result ProcessCtlHandler(const ProcessID procID,
                               const ProcessOperation action,
+                              const uint forPriorityOnly,
                               const Address addr,
                               const Address output)
 {
@@ -138,16 +139,16 @@ API::Result ProcessCtlHandler(const ProcessID procID,
         info->id    = proc->getID();
         info->state = proc->getState();
         info->parent = proc->getParent();
-        info->priority = proc->getPriority();//so its not reading this for some reason
+        info->priority = proc->getPriority();
         break;
 
-    case WaitPID: //my guess is we add another OP to change priority when calling process ctrl handler // and for that maybe we'll have priority queue?
-        if (procs->wait(proc) != ProcessManager::Success) //proc is process that will go first now. procs is dequeued in wait it seems
+    case WaitPID:
+        if (procs->wait(proc) != ProcessManager::Success)
         {
             ERROR("failed to wait for Process ID " << proc->getID());
             return API::IOError;
         }
-        procs->schedule(); //hmm does something here
+        procs->schedule();
 
         // contains the exit status of the other process.
         // Note that only the Intel code has kernel stacks.
@@ -160,8 +161,8 @@ API::Result ProcessCtlHandler(const ProcessID procID,
         return (API::Result) ((API::Success) | (procs->current()->getWaitResult() << 16)); //im not sure what this is for
 
     case ChangePri: //temp items below for now
-        if (procs->switchProcessPriorities(proc) != ProcessManager::Success) //proc is process that will go first now. procs is dequeued in wait it seems
-        {
+        if (procs->changePriority(proc, forPriorityOnly) != ProcessManager::Success) //proc is process that will go first now. procs is dequeued in wait it seems
+        { //switch process will sort the queue, and then schedule will call the new process at the head and bam! hopefully it works..
             ERROR("failed to change priorities for Process ID " << proc->getID());
             return API::IOError; 
         }

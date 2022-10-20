@@ -68,6 +68,12 @@ Scheduler::Result Scheduler::dequeue(Process *proc, bool ignoreState)
     return InvalidArgument;
 }
 
+Scheduler::Result Scheduler::sort()
+{
+    m_queue.sort();
+    return Success;
+}
+
 Process * Scheduler::select() //interesting
 {
     if (m_queue.count() > 0)

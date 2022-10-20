@@ -21,7 +21,7 @@
 
 #include <Vector.h>
 #include <Macros.h>
-#include <Queue.h>
+#include <PriorityQueue.h>
 #include "Process.h"
 #include "ProcessManager.h"
 
@@ -81,6 +81,13 @@ class Scheduler
     Result dequeue(Process *proc, bool ignoreState);
 
     /**
+     * Sort processes by priority.
+     *
+     * @return Result code
+     */
+    Result sort();
+
+    /**
      * Select the next process to run.
      *
      * @return Process pointer or NULL if no matching process found
@@ -90,7 +97,7 @@ class Scheduler
   private:
 
     /** Contains processes ready to run */
-    Queue<Process *, MAX_PROCS> m_queue; //i guess the order is the priority and we can just add a priority variable?
+    PriorityQueue<Process *, MAX_PROCS> m_queue; //i guess the order is the priority and we can just add a priority variable?
 };
 
 /**

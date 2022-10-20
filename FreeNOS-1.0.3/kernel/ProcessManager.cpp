@@ -232,7 +232,7 @@ ProcessManager::Result ProcessManager::wait(Process *proc)
     return dequeueProcess(m_current);
 }
 
-ProcessManager::Result ProcessManager::switchProcessPriorities(Process *proc) //change the priority somewhere in here and make it so queue pops based on priority??
+ProcessManager::Result ProcessManager::changePriority(Process *proc, uint newPriority) //change the priority somewhere in here and make it so queue pops based on priority??
 {
     if (m_current->wait(proc->getID()) != Process::Success) //this is another wait it seems, maybe we can use it tho bc idk how else to check for errors
     {
@@ -240,7 +240,9 @@ ProcessManager::Result ProcessManager::switchProcessPriorities(Process *proc) //
         return IOError;
     }
 
-    return dequeueProcess(m_current); //maybe we can have a switch items in queue call here rather than dequeue
+    proc->setPriority(newPriority); // i think this is the right one vs the one below
+    //m_current->setPriority(newPriority); //set new priority
+    return sortProcesses(); //calling sort here hopefully its right.
 }
 
 ProcessManager::Result ProcessManager::stop(Process *proc)
@@ -432,6 +434,17 @@ ProcessManager::Result ProcessManager::dequeueProcess(Process *proc, const bool 
     if (m_scheduler->dequeue(proc, ignoreState) != Scheduler::Success)
     {
         ERROR("process ID " << proc->getID() << " not removed from Scheduler");
+        return IOError;
+    }
+
+    return Success;
+}
+
+ProcessManager::Result ProcessManager::sortProcesses()
+{
+    if (m_scheduler->sort() != Scheduler::Success)
+    {
+        ERROR("process cannot be sorted");
         return IOError;
     }
 

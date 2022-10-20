@@ -42,9 +42,9 @@ Renice::~Renice()
 }
 
 //straight copy from waitpid, gotta let it take two arguements maybe
-pid_t waitpid(pid_t pid, int *stat_loc, int options) //i think maybe call this in exec() or should we be neat and make a changePri folder? so copying the way waitPID is organized
+pid_t renice(pid_t pid, uint newPriority, int *stat_loc, int options) //i think maybe call this in exec() or should we be neat and make a changePri folder? so copying the way waitPID is organized
 {
-    const ulong result = (ulong) ProcessCtl(pid, ChangePri); //process ctrl called here, need to sub with new changePri or whatever i named it
+    const ulong result = (ulong) ProcessCtl(pid, ChangePri, newPriority); //process ctrl called here, need to sub with new changePri or whatever i named it
 
     switch ((const API::Result) (result & 0xffff))
     {
@@ -67,9 +67,10 @@ pid_t waitpid(pid_t pid, int *stat_loc, int options) //i think maybe call this i
 
 Renice::Result Renice::exec()
 {
-    int newPriority = 0;
+    uint newPriority = 1;
     ProcessID processID = 0;
     String out;
+    int status;
 
     // Convert input to integer values
     newPriority = atoi(arguments().get("PRIORITY"));
@@ -97,8 +98,10 @@ Renice::Result Renice::exec()
     processID = atoi(arguments().get("PROCESSID"));
 
     // Change the Priority of the ProcessID
-    ProcessClient::Info info;
-    info.kernelState.priority = newPriority;
+
+    renice(processID, newPriority, &status, 0);
+    //ProcessClient::Info info;
+    //info.kernelState.priority = newPriority;
 
     out = ""; //Delete these print statements later
     snprintf(line, sizeof(line),
