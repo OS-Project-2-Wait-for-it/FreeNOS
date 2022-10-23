@@ -26,6 +26,7 @@ ProcessList::ProcessList(int argc, char **argv)
     : POSIXApplication(argc, argv)
 {
     parser().setDescription("Output system process list");
+    parser().registerFlag('l', "long", "List process priority");
 }
 
 ProcessList::Result ProcessList::exec()
@@ -33,27 +34,54 @@ ProcessList::Result ProcessList::exec()
     const ProcessClient process;
     String out;
 
-    // Print header
-    out << "ID  PARENT  USER GROUP STATUS PRIORITY     CMD\r\n"; //changed priority
+    if (arguments().get("long")){
+        // Print header
+        out << "ID  PARENT  USER GROUP STATUS PRIORITY     CMD\r\n"; //changed priority
 
-    // Loop processes
-    for (ProcessID pid = 0; pid < ProcessClient::MaximumProcesses; pid++)
-    {
-        ProcessClient::Info info;
-        //ProcessClient::Priority test; //i think we need something like this which might be why he suggested we make a new enum??
-
-        const ProcessClient::Result result = process.processInfo(pid, info);
-        if (result == ProcessClient::Success)
+        // Loop processes
+        for (ProcessID pid = 0; pid < ProcessClient::MaximumProcesses; pid++)
         {
-            DEBUG("PID " << pid << " state = " << *info.textState);
+            ProcessClient::Info info;
+            //ProcessClient::Priority test; //i think we need something like this which might be why he suggested we make a new enum??
 
-            // Output a line
-            char line[128];
-            snprintf(line, sizeof(line),
-                    "%3d %7d %4d %5d %10s %3u %32s\r\n",
-                     pid, info.kernelState.parent,
-                     0, 0, *info.textState, info.kernelState.priority, *info.command); //had info.priority
-            out << line;
+            const ProcessClient::Result result = process.processInfo(pid, info);
+            if (result == ProcessClient::Success)
+            {
+                DEBUG("PID " << pid << " state = " << *info.textState);
+
+                // Output a line
+                char line[128];
+                snprintf(line, sizeof(line),
+                        "%3d %7d %4d %5d %10s %3u %32s\r\n",
+                        pid, info.kernelState.parent,
+                        0, 0, *info.textState, info.kernelState.priority, *info.command); //had info.priority
+                out << line;
+            }
+        }
+    }
+    else{
+         // Print header
+        out << "ID  PARENT  USER GROUP STATUS     CMD\r\n";
+
+        // Loop processes
+        for (ProcessID pid = 0; pid < ProcessClient::MaximumProcesses; pid++)
+        {
+            ProcessClient::Info info;
+            //ProcessClient::Priority test; //i think we need something like this which might be why he suggested we make a new enum??
+
+            const ProcessClient::Result result = process.processInfo(pid, info);
+            if (result == ProcessClient::Success)
+            {
+                DEBUG("PID " << pid << " state = " << *info.textState);
+
+                // Output a line
+                char line[128];
+                snprintf(line, sizeof(line),
+                        "%3d %7d %4d %5d %10s %32s\r\n",
+                        pid, info.kernelState.parent,
+                        0, 0, *info.textState, *info.command); //had info.priority
+                out << line;
+            }
         }
     }
 
