@@ -131,6 +131,7 @@ inline API::Result ProcessCtl(const ProcessID proc,
  */
 extern API::Result ProcessCtlHandler(const ProcessID proc,
                                      const ProcessOperation op,
+                                     const uint forPriorityOnly,
                                      const Address addr,
                                      const Address output);
 

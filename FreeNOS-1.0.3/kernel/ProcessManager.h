@@ -118,6 +118,7 @@ class ProcessManager
      * Switch process priorities.
      *
      * @param proc Process pointer
+     * @param newPriority New priority to set the process "proc"
      *
      * @return Result code
      */

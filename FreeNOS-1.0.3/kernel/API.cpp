@@ -18,14 +18,6 @@
 #include <FreeNOS/System.h>
 #include <Log.h>
 
-//The following includes resolve the red squiggles but it leads to another issue.
-#include <API/ProcessCtl.cpp> 
-#include <API/PrivExec.cpp>
-#include "API/SystemInfo.cpp"
-#include "API/VMCopy.cpp"
-#include "API/VMCtl.cpp"
-#include "API/VMShare.cpp"
-
 API::API()
 {
     DEBUG("");
