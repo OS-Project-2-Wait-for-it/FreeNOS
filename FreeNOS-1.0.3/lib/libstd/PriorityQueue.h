@@ -74,26 +74,41 @@ template <class T, Size N> class PriorityQueue : public Container
      *
      * @return True if successful, false otherwise
      */
-    void sort()
-    {
-        Process minPri;
-
-        int placeHolder;
-        for(int i=0; i<m_array.count()-1; i++)
-        {
-            minPri = m_array[i];
-            for(int j = i; j<m_array.count(); j++)
-            {
-                if(minPri.m_priority > m_array[j].m_priority) //idk if this is right
-                {
-                    minPri = m_array[j];
-                    placeHolder = j;
+    void sort() {
+        Process* minPri;
+        for(uint i = 0; i < count(); i++) {
+            int index1 = i;
+            for(uint j = i; j < count(); i++) {
+                int index2 = j;
+                if(m_array[index1]->getPriority() > m_array[index2]->getPriority()) {
+                    minPri = m_array[index1];
+                    m_array[index1] = m_array[index2];
+                    m_array[index2] = minPri;
                 }
             }
-            m_array[placeHolder] = m_array[i];
-            m_array[i] = minPri;
         }
     }
+    // void sort()
+    // {
+    //     Process* minPri;
+
+    //     int placeHolder;
+    //     for(int i=0; i<m_array.count()-1; i++)
+    //     {
+    //         for(int j = i; j<m_array.count(); j++)
+    //         {
+    //             if(m_array[i].m_priority > m_array[j].m_priority) //idk if this is right
+    //             {
+    //                 minPri = *m_array[i];
+    //                 m_array[i] = m_array[j];
+    //                 //placeHolder = j;
+    //                 m_array[j] = *minPri;
+    //             }
+    //         }
+    //         //m_array[placeHolder] = m_array[i];
+    //         //m_array[i] = minPri;
+    //     }
+    // }
 
     /**
      * Remove item from the tail of the Queue.
