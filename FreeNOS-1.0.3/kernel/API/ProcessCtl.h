@@ -97,11 +97,11 @@ Log & operator << (Log &log, ProcessOperation op);
  */
 inline API::Result ProcessCtl(const ProcessID proc,
                               const ProcessOperation op,
-                              const uint forPriorityOnly = 1,
                               const Address addr = 0,
-                              const Address output = 0)
+                              const Address output = 0,
+                              const uint forPriorityOnly = 1)
 {
-    return (API::Result) trapKernel4(API::ProcessCtlNumber, proc, op, addr, output);
+    return (API::Result) trapKernel5(API::ProcessCtlNumber, proc, op, addr, output, forPriorityOnly);
 }
 
 /**
@@ -131,9 +131,9 @@ inline API::Result ProcessCtl(const ProcessID proc,
  */
 extern API::Result ProcessCtlHandler(const ProcessID proc,
                                      const ProcessOperation op,
-                                     const uint forPriorityOnly,
                                      const Address addr,
-                                     const Address output);
+                                     const Address output,
+                                     const uint forPriorityOnly);
 
 /**
  * @}

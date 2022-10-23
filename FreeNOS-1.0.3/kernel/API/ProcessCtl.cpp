@@ -26,9 +26,9 @@
 
 API::Result ProcessCtlHandler(const ProcessID procID,
                               const ProcessOperation action,
-                              const uint forPriorityOnly,
                               const Address addr,
-                              const Address output)
+                              const Address output,
+                              const uint forPriorityOnly)
 {
     const Arch::MemoryMap map;
     Process *proc = ZERO;

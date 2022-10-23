@@ -58,7 +58,8 @@ static API::Result hostPrivExecHandler(PrivOperation op, Address addr)
 static API::Result hostProcessCtlHandler(ProcessID procID,
                                          ProcessOperation action,
                                          Address addr,
-                                         Address output)
+                                         Address output,
+                                         uint forPriorityOnly)
 {
     switch (action)
     {
@@ -205,7 +206,7 @@ static API::Result hostApiHandler(ulong api, ulong arg1, ulong arg2, ulong arg3,
             return hostPrivExecHandler((PrivOperation) arg1, arg2);
 
         case API::ProcessCtlNumber:
-            return hostProcessCtlHandler(arg1, (ProcessOperation) arg2, arg3, arg4);
+            return hostProcessCtlHandler(arg1, (ProcessOperation) arg2, arg3, arg4, arg5);
 
         case API::SystemInfoNumber:
             return hostSystemInfoHandler((SystemInformation *) arg1);
