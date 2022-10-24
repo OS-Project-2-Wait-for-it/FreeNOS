@@ -138,6 +138,20 @@ Process::Result Process::wait(ProcessID id)
     return Success;
 }
 
+Process::Result Process::switchnice(ProcessID id) //i dont see a good use for this function here
+{
+    if (m_state != Ready)
+    {
+        ERROR("Process ID " << m_id << " has invalid state: " << (uint) m_state);
+        return InvalidArgument;
+    }
+
+    m_state  = Ready; //?? this doesnt make sense if we're already checking that its ready but ok
+    //m_waitId = id;
+
+    return Success;
+}
+
 Process::Result Process::join(const uint result)
 {
     if (m_state != Waiting)

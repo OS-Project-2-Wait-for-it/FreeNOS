@@ -79,7 +79,7 @@ template <class T, Size N> class PriorityQueue : public Container
         for(uint i = 0; i < count(); i++) {
             int index1 = i;
             for(uint j = i; j < count(); i++) {
-                int index2 = j;
+                int index2 = j; //was declared here
                 if(m_array[index1]->getPriority() > m_array[index2]->getPriority()) {
                     minPri = m_array[index1];
                     m_array[index1] = m_array[index2];

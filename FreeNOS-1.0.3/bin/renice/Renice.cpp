@@ -34,17 +34,13 @@ Renice::Renice(int argc, char **argv)
     parser().setDescription("Changes the priority of the inputted process");
     parser().registerPositional("PRIORITY", "Value of new ProcessID priority");
     parser().registerPositional("PROCESSID", "Changes the priority of the process ID");
-    parser().registerFlag('u', "Allows pid input", "Allows the user to modify priority for a PID");
-}
-
-Renice::~Renice()
-{
+    parser().registerFlag('n', "Allows pid input", "Allows the user to modify priority for a PID");
 }
 
 //straight copy from waitpid, gotta let it take two arguements maybe
-pid_t renice(pid_t pid, uint newPriority, int *stat_loc, int options) //i think maybe call this in exec() or should we be neat and make a changePri folder? so copying the way waitPID is organized
+pid_t renice(pid_t pid, uint newPriority, int *stat_loc, int options)
 {
-    const ulong result = (ulong) ProcessCtl(pid, ChangePri, newPriority); //process ctrl called here, need to sub with new changePri or whatever i named it
+    const ulong result = (ulong) ProcessCtl(pid, ChangePri, 0,0,newPriority); //added to zeros so it doesnt think the int for priority is supposed to go to the other two arguments
 
     switch ((const API::Result) (result & 0xffff))
     {
@@ -79,23 +75,23 @@ Renice::Result Renice::exec()
     char line[128]; //Delete these print statements later
             snprintf(line, sizeof(line),
                     "%3d %7d %4d %3u\r\n",
-                     processID, processID,
+                     newPriority, processID,
                      0, 0);
             out << line;
 
     if (newPriority <= 0)
     {
-        ERROR("invalid priority `" << arguments().get("PRIORITY") << "'");
+        ERROR("invalid priority `" << newPriority << "'");
         return InvalidArgument;
     }
     if (processID <= 0)
     {
-        ERROR("invalid processID `" << arguments().get("PROCESSID") << "'");
+        ERROR("invalid processID `" << processID << "'");
         return InvalidArgument;
     }
 
-    newPriority = atoi(arguments().get("PRIORITY"));
-    processID = atoi(arguments().get("PROCESSID"));
+    //newPriority = atoi(arguments().get("PRIORITY"));
+    //processID = atoi(arguments().get("PROCESSID"));
 
     // Change the Priority of the ProcessID
 
@@ -103,12 +99,12 @@ Renice::Result Renice::exec()
     //ProcessClient::Info info;
     //info.kernelState.priority = newPriority;
 
-    out = ""; //Delete these print statements later
-    snprintf(line, sizeof(line),
-                    "%3d %7d %4d %3u\r\n",
-                     processID, processID,
-                     0, 0);
-            out << line;
+    //out = ""; //Delete these print statements later
+    //snprintf(line, sizeof(line),
+              //      "%3d %7d %4d %3u\r\n",
+              //       processID, processID,
+              //       0, 0);
+            //out << line;
 
     // Done
     return Success;

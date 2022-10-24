@@ -77,10 +77,9 @@ Process * ProcessManager::create(const Address entry,
 
     ProcessClient::Info info;
     // Overwrite dummy with actual Process
-    m_procs.insertAt(pid, proc); //looks interesting
+    m_procs.insertAt(pid, proc);
     info.priority = pid;
     info.priority = proc->getWait();
-    //m_priority->getWait(); //tried this idk what im doing
     
 
     // Report to scheduler, if requested
@@ -104,10 +103,10 @@ Process * ProcessManager::get(const ProcessID id)
 
 void ProcessManager::remove(Process *proc, const uint exitStatus)
 {
-    if (proc == m_idle) //hmmm
+    if (proc == m_idle)
         m_idle = ZERO;
 
-    if (proc == m_current) //also hmm
+    if (proc == m_current)
         m_current = ZERO;
 
     // Notify processes which are waiting for this Process
@@ -116,7 +115,7 @@ void ProcessManager::remove(Process *proc, const uint exitStatus)
     {
         if (m_procs[i] != ZERO &&
             m_procs[i]->getState() == Process::Waiting &&
-            m_procs[i]->getWait() == proc->getID()) //triple hmm
+            m_procs[i]->getWait() == proc->getID())
         {
             const Process::Result result = m_procs[i]->join(exitStatus);
             if (result != Process::Success)
@@ -234,7 +233,7 @@ ProcessManager::Result ProcessManager::wait(Process *proc)
 
 ProcessManager::Result ProcessManager::changePriority(Process *proc, uint newPriority) //change the priority somewhere in here and make it so queue pops based on priority??
 {
-    if (m_current->wait(proc->getID()) != Process::Success) //this is another wait it seems, maybe we can use it tho bc idk how else to check for errors
+    if (m_current->switchnice(proc->getID()) != Process::Success) //hmm something else probably needs to go here
     {
         ERROR("process ID " << m_current->getID() << " failed to wait");
         return IOError;
@@ -442,7 +441,7 @@ ProcessManager::Result ProcessManager::dequeueProcess(Process *proc, const bool 
 
 ProcessManager::Result ProcessManager::sortProcesses()
 {
-    if (m_scheduler->sort() != Scheduler::Success)
+    if (m_scheduler->sort() != Scheduler::Success) //could this be causing a probem?? :(
     {
         ERROR("process cannot be sorted");
         return IOError;

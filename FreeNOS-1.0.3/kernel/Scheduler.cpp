@@ -70,7 +70,7 @@ Scheduler::Result Scheduler::dequeue(Process *proc, bool ignoreState)
 
 Scheduler::Result Scheduler::sort()
 {
-    m_queue.sort();
+    //m_queue.sort();
     return Success;
 }
 

@@ -212,6 +212,15 @@ class Process
     Result wait(ProcessID id);
 
     /**
+     * Let Process wait for other Process to terminate.
+     *
+     * @param id Process ID to renice
+     *
+     * @return Result code
+     */
+    Result switchnice(ProcessID id);
+
+    /**
      * Complete waiting for another Process.
      *
      * @param result Exit code of the other process
@@ -254,7 +263,7 @@ class Process
     /**
      * Set parent process priority.
      */
-    void setPriority(Size newPriority);
+    void setPriority(uint newPriority);
 
   protected:
 
