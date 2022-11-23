@@ -14,3 +14,5 @@ Dynamic and Shared memory
 Shared and Private Memory mappings support in MemoryServer  
 Simplified virtual FileSystems by using synchroneous I/O and Shared memory mappings  
 core manager  
+  
+kernel/processshares.h -> contains struct MemoryShare, coreID, share tag, physical memory address range
