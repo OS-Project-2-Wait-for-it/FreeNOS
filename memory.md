@@ -24,7 +24,7 @@ The Split Allocator separates kernel mapped memory at virtual and physical addre
 ### Notes:  
 heap allocator  
 lib/libarch/memory.h, contains address virt, address, phys, size, access  
-libipc, implements user-space IPC using shared memory  
+libipc, implements user-space IPC using shared memory`#0969DA`	  
 Dynamic and Shared memory  
 Shared and Private Memory mappings support in MemoryServer  
 Simplified virtual FileSystems by using synchroneous I/O and Shared memory mappings  
