@@ -10,7 +10,7 @@ Contributions: Shane Dirksen
 
 ### Summary:  
 
-The Allocator class defines the abstract memory allocation. It forms a hierarchy of parent-children relationships. If a child does not have enough memory, it can request more from the parent. Classes that inherit from the Allocator include: BitAllocator, BubbleAllocator, PageAllocator, PoolAllocator, and Split Allocator. These files are located in lib/liballoc/  
+The Allocator class defines the abstract memory allocation. It forms a hierarchy of parent-children relationships. If a child does not have enough memory, it can request more from the parent. Classes that inherit from the Allocator include: BitAllocator, BubbleAllocator, PageAllocator, PoolAllocator, and Split Allocator. These files are located in `lib/liballoc/`  
 
 The Pool Allocator manages same-sized obkects and allocates memory from pools, with each pool being a power of two. Pools are pre-allocated with a bitmap that represents free blocks. The Pool struct allocates same sized objects from a contiguous block of memory. It contains pointers called "next" and "prev" that points to the next/previous pool of a specified size.  
 
@@ -23,14 +23,14 @@ The Split Allocator separates kernel mapped memory at virtual and physical addre
 
 ### Notes:  
 heap allocator  
-lib/libarch/memory.h, contains address virt, address, phys, size, access  
-libipc, implements user-space IPC using shared memory`#0969DA`	  
+`lib/libarch/memory.h`, contains address virt, address, phys, size, access  
+libipc, implements user-space IPC using shared memory	  
 Dynamic and Shared memory  
 Shared and Private Memory mappings support in MemoryServer  
 Simplified virtual FileSystems by using synchroneous I/O and Shared memory mappings  
 core manager  
   
-kernel/processshares.h -> contains struct MemoryShare, coreID, share tag, physical memory address range  
+`kernel/processshares.h` -> contains struct MemoryShare, coreID, share tag, physical memory address range  
 
-lib/liballoc/alloctor.h -> Memory Allocator  
+`lib/liballoc/alloctor.h` -> Memory Allocator  
 
