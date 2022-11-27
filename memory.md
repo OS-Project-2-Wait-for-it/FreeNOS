@@ -19,7 +19,11 @@ The Bit Allocator contains BitArray, which scans the array for open bits. All me
 The Bubble Allocator continually grows allocated memory and cannot free the memory.  
 The Page Allocator allocates virtual memory using the memory server. An incomplete issue is that the release() function at line 73 does not release memory back to the system, which may result in fragmented virtual memory that would cause issues for higher-level allocators.  
 
-The Split Allocator separates kernel mapped memory at virtual and physical addresses.  The allocate() function allocates one physical memory page.
+The Split Allocator separates kernel mapped memory at virtual and physical addresses.  The allocate() function allocates one physical memory page.  
+
+`kernel/kernel.cpp` line 108 contains initializeHeap() function, which sets up the kernel heap for dynamic memory allocation. It uses new() and delete() operators and it is called before any object is created using new()  
+
+`lib/libarch/MemoryMap.h` contains the virtual memory map layout, and is the parent to the ARMMap and IntelMap classes, which define the memory maps for ARM and Intel architectures Currently limited to 1GB of supported system memory. The memory is delineated into several memory regions, which are available on the system. The regions are labeled by predefined virtual memory ranges and the virtual memory address range of each depends on the architecture implementation.  
 
 ### Notes:  
 heap allocator  
