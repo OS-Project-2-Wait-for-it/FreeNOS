@@ -12,6 +12,8 @@ Contributions: Shane Dirksen
 
 The Allocator class defines the abstract memory allocation. It forms a hierarchy of parent-children relationships. If a child does not have enough memory, it can request more from the parent. Classes that inherit from the Allocator include: BitAllocator, BubbleAllocator, PageAllocator, PoolAllocator, and Split Allocator. These files are located in `lib/liballoc/`  
 
+![image](https://user-images.githubusercontent.com/87223787/204167767-68d50752-e3fa-4b18-ab0f-3d21188d9809.png)
+
 The Pool Allocator manages same-sized obkects and allocates memory from pools, with each pool being a power of two. Pools are pre-allocated with a bitmap that represents free blocks. The Pool struct allocates same sized objects from a contiguous block of memory. It contains pointers called "next" and "prev" that points to the next/previous pool of a specified size.  
 
 The Bit Allocator contains BitArray, which scans the array for open bits. All memory is divided into equally sized parts called chunks. '1' signals that the chunk is used and '0' is free. The creator(s) of the OS note that this is inefficient, because a caller could be unlucky and need to scan the entire array for a free bit; the Linux kernel uses a more efficient method called a "buddy allocator," which combines bit arrays and linked lists.  
@@ -24,6 +26,9 @@ The Split Allocator separates kernel mapped memory at virtual and physical addre
 `kernel/kernel.cpp` line 108 contains initializeHeap() function, which sets up the kernel heap for dynamic memory allocation. It uses new() and delete() operators and it is called before any object is created using new()  
 
 `lib/libarch/MemoryMap.h` contains the virtual memory map layout, and is the parent to the ARMMap and IntelMap classes, which define the memory maps for ARM and Intel architectures Currently limited to 1GB of supported system memory. The memory is delineated into several memory regions, which are available on the system. The regions are labeled by predefined virtual memory ranges and the virtual memory address range of each depends on the architecture implementation.  
+
+Within `kernel/intel`, looking at the Intel implementation, the `IntelKernel.cpp` contains a function called memContext, that refreshes and uses the SplitAllocator. It also calls the `MemoryBlock` to fill the Task State Segment (TSS). MemoryBlock is located in `lib/libstd` and sets, copies, and compares memory blocks.  
+
 
 ### Notes:  
 heap allocator  
