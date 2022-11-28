@@ -29,6 +29,10 @@ The Split Allocator separates kernel mapped memory at virtual and physical addre
 
 Within `kernel/intel`, looking at the Intel implementation, the `IntelKernel.cpp` contains a function called memContext, that refreshes and uses the SplitAllocator. It also calls the `MemoryBlock` to fill the Task State Segment (TSS). MemoryBlock is located in `lib/libstd` and sets, copies, and compares memory blocks.  
 
+Within `kernel`, the file ProcessManager.cpp has a function create() for creating processes, that has a MemoryMap argument. Here there are variables such as KernelData, UserData, UserHeap, and UserStack. Here new memory range values for the memory region are defined. The namespace Memory has flags for readable, writeable, executable, user, uncached, InnerCached, OuterCached, and device; it also contains the struct Range that has the virtual address, the physical address, the size, and access flag. 
+
+![Animation](https://user-images.githubusercontent.com/87223787/204168264-678e6d3a-c9f3-47d1-93a6-4a137b1b221b.gif)
+
 
 ### Notes:  
 heap allocator  
